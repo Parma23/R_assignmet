@@ -1,0 +1,134 @@
+---
+title: "Titanic spceship"
+output: html_notebook
+Parma
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+```{r}
+# read the data 
+
+df <- read.csv("C:/Users/xende/Desktop/spaceship/Titanic_Spaceship_Cleaned.csv")
+df
+```
+```{r}
+install.packages("tidyvers")
+install.packages("ggplot2")
+library(ggplot2)
+library(tidyverse)
+```
+
+```{r}
+# Using tidyR 
+
+
+
+colSums(is.na(df))
+```
+```{r}
+df %>% summarize(na_count = sum(is.na(df)))
+
+
+colSums(is.na(df))
+```
+```{r}
+df %>% summarise(data_type = class(df))
+```
+```{r}
+df_long <- pivot_longer(df, everything(), names_to = 'attribute', values_to = 'val')
+df_long %>% group_by(col) %>% summarise(data_type = class(val))
+```
+```{r}
+typeof(df)
+```
+```{r}
+missing_values <- sum(is.na(df))
+print(missing_values)
+
+```
+```{r}
+# Multiple visualizations to analyze data
+  ggplot(data = df, aes(x = Name, fill = Cabin)) +
+  geom_bar(position = "fill", color = "black") +
+  geom_text(
+    aes(label = stat(count), y = stat(count)),
+    position = position_fill(vjust = 1),
+    color = "red",
+    size = 2,
+    stat = "count"
+  ) +
+  labs(x = "Name", y = "cabin", title = "name by cabin")
+
+```
+
+```{r}
+names(dfd)
+```
+```{r}
+  ggplot(data = df, aes(x = Transported , fill = Destination)) +
+  geom_bar(position = "fill", color = "black") +
+  geom_text(
+    aes(label = stat(count), y = stat(count)),
+    position = position_fill(vjust = 1),
+    color = "red",
+    size = 2,
+    stat = "count"
+  ) +
+  labs(x = "CryoSleep", y = "Proportion of Transported ", title = "Proportion of Transported by CryoSleep")
+```
+```{r}
+# define the dataframe and mapping 
+ggplot(data = df,
+       mapping = aes(x = HomePlanet,
+                     y =Destination))+
+  # define 2 gemotrical 
+  geom_point(size = 3)+
+  geom_line(colour = "red")
+```
+```{r}
+# histogram
+df  %>%
+  ggplot(aes(Destination))+
+  geom_bar(fill = "#97B3C6")
+
+  theme_bw()+
+  labs(x = "Destination",
+       y = NULL,
+       title = "observation by Destination")
+```
+```{r}
+ # using the "Enrollment" column from df
+HomePlanet_values <- df$HomePlanet
+
+# Plot the pie chart
+pie(HomePlanet_values, labels = df$Destination, main = "HomePlanet Distribution")
+```
+
+
+```{r}
+p_value <-HomePlanet_values>= 0 & !is.na(HomePlanet_values)
+
+p_value <- HomePlanet_values[p_value]
+destination_lables <- df$Destination[p_value]
+
+# now creating pie chart 
+pie(p_value, lables = destination_lables, main = 'HomePlanet')
+```
+
+```{r}
+# histogram 
+ggplot(df, aes(x = HomePlanet)) + geom_bar() 
+```
+
